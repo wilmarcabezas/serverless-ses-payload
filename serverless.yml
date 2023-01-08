@@ -1,0 +1,28 @@
+service: email-sender
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  environment:
+    TOPIC_ARN: 'arn here'
+    TARGET_ARN: 'arn here'
+
+functions:
+  sendEmail:
+    handler: handler.handler
+    events:
+      - http:
+          method: POST
+          path: /sendemail
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - ses:*
+        Resource: '*'
+
+plugins:
+  - serverless-iam-roles-per-function
